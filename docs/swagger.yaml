@@ -1,0 +1,575 @@
+basePath: /
+definitions:
+  First_server.TodoItem:
+    properties:
+      description:
+        type: string
+      done:
+        type: boolean
+      id:
+        type: integer
+      title:
+        type: string
+    required:
+    - title
+    type: object
+  First_server.TodoList:
+    properties:
+      description:
+        type: string
+      id:
+        type: integer
+      title:
+        type: string
+    required:
+    - title
+    type: object
+  First_server.UpdateItemInput:
+    properties:
+      description:
+        type: string
+      done:
+        type: boolean
+      title:
+        type: string
+    type: object
+  First_server.UpdateListInput:
+    properties:
+      description:
+        type: string
+      title:
+        type: string
+    type: object
+  First_server.User:
+    properties:
+      name:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - name
+    - password
+    - username
+    type: object
+  handler.respError:
+    properties:
+      message:
+        type: string
+    type: object
+  handler.signInInput:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - password
+    - username
+    type: object
+  handler.statusResponse:
+    properties:
+      status:
+        type: string
+    type: object
+host: localhost:8000
+info:
+  contact: {}
+  description: API server for ToDo Application
+  title: Todo API
+  version: "0.8"
+paths:
+  /api/items/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete item
+      operationId: delete-item
+      parameters:
+      - description: Item ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.statusResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.respError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.respError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.respError'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.respError'
+      security:
+      - ApiKeyAuth: []
+      summary: Delete item
+      tags:
+      - Items
+    get:
+      consumes:
+      - application/json
+      description: Get item by ID
+      operationId: get-item-by-id
+      parameters:
+      - description: Item ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/First_server.TodoItem'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.respError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.respError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.respError'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.respError'
+      security:
+      - ApiKeyAuth: []
+      summary: Get item by ID
+      tags:
+      - Items
+    put:
+      consumes:
+      - application/json
+      description: Update item's info
+      operationId: update-item
+      parameters:
+      - description: updated item info
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/First_server.UpdateItemInput'
+      - description: Item ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.statusResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.respError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.respError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.respError'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.respError'
+      security:
+      - ApiKeyAuth: []
+      summary: Update item
+      tags:
+      - Items
+  /api/lists:
+    get:
+      consumes:
+      - application/json
+      description: Get todo lists
+      operationId: get-all-lists
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: integer
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.respError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.respError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.respError'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.respError'
+      security:
+      - ApiKeyAuth: []
+      summary: Get all user's todo lists
+      tags:
+      - Lists
+    post:
+      consumes:
+      - application/json
+      description: Create new todo list
+      operationId: create-list
+      parameters:
+      - description: list info
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/First_server.TodoList'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: integer
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.respError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.respError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.respError'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.respError'
+      security:
+      - ApiKeyAuth: []
+      summary: Create todo list
+      tags:
+      - Lists
+  /api/lists/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete todo list
+      operationId: delete-list
+      parameters:
+      - description: List ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.statusResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.respError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.respError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.respError'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.respError'
+      security:
+      - ApiKeyAuth: []
+      summary: Delete todo list
+      tags:
+      - Lists
+    get:
+      consumes:
+      - application/json
+      description: Get todo list by ID
+      operationId: get-list-by-id
+      parameters:
+      - description: List ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: integer
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.respError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.respError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.respError'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.respError'
+      security:
+      - ApiKeyAuth: []
+      summary: Get todo list by ID
+      tags:
+      - Lists
+    put:
+      consumes:
+      - application/json
+      description: Update todo list's info
+      operationId: update-list
+      parameters:
+      - description: updated list info
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/First_server.UpdateListInput'
+      - description: List ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.statusResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.respError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.respError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.respError'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.respError'
+      security:
+      - ApiKeyAuth: []
+      summary: Update todo list
+      tags:
+      - Lists
+  /api/lists/{id}/items:
+    get:
+      consumes:
+      - application/json
+      description: Get all items in list
+      operationId: get-all-items
+      parameters:
+      - description: List ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/First_server.TodoItem'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.respError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.respError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.respError'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.respError'
+      security:
+      - ApiKeyAuth: []
+      summary: Get all items in list
+      tags:
+      - Items
+    post:
+      consumes:
+      - application/json
+      description: Create new item in list
+      operationId: create-item
+      parameters:
+      - description: item info
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/First_server.TodoItem'
+      - description: List ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: integer
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.respError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.respError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.respError'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.respError'
+      security:
+      - ApiKeyAuth: []
+      summary: Create new item
+      tags:
+      - Items
+  /auth/sign-in:
+    post:
+      consumes:
+      - application/json
+      description: Login
+      operationId: login
+      parameters:
+      - description: credentials
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/handler.signInInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: token
+          schema:
+            type: integer
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.respError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.respError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.respError'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.respError'
+      summary: SignIn
+      tags:
+      - Auth
+  /auth/sign-up:
+    post:
+      consumes:
+      - application/json
+      description: Create new account
+      operationId: create-account
+      parameters:
+      - description: account info
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/First_server.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: integer
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.respError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.respError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.respError'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.respError'
+      summary: SignUp
+      tags:
+      - Auth
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

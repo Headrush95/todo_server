@@ -6,6 +6,18 @@ import (
 	"net/http"
 )
 
+// @Summary SignUp
+// @Tags Auth
+// @Description Create new account
+// @ID create-account
+// @Accept json
+// @Produce json
+// @Param input body first_server.User true "account info"
+// @Success 200 {integer} integer 1
+// @Failure 400,404 {object} respError
+// @Failure 500 {object} respError
+// @Failure default {object} respError
+// @Router /auth/sign-up [post]
 func (h *Handler) signUp(c *gin.Context) {
 	var input first_server.User
 
@@ -26,13 +38,25 @@ func (h *Handler) signUp(c *gin.Context) {
 
 }
 
-type singInInput struct {
+type signInInput struct {
 	Username string `json:"username" binding:"required"`
 	Password string `json:"password" binding:"required"`
 }
 
+// @Summary SignIn
+// @Tags Auth
+// @Description Login
+// @ID login
+// @Accept json
+// @Produce json
+// @Param input body signInInput true "credentials"
+// @Success 200 {integer} string "token"
+// @Failure 400,404 {object} respError
+// @Failure 500 {object} respError
+// @Failure default {object} respError
+// @Router /auth/sign-in [post]
 func (h *Handler) signIn(c *gin.Context) {
-	var input singInInput
+	var input signInInput
 
 	if err := c.BindJSON(&input); err != nil {
 		newErrorResponse(c, http.StatusBadRequest, err.Error())

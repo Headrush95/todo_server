@@ -7,6 +7,20 @@ import (
 	"strconv"
 )
 
+// @Summary Create new item
+// @Security ApiKeyAuth
+// @Tags Items
+// @Description Create new item in list
+// @ID create-item
+// @Accept json
+// @Produce json
+// @Param input body First_server.TodoItem true "item info"
+// @Param id path int true "List ID"
+// @Success 200 {integer} integer 1
+// @Failure 400,404 {object} respError
+// @Failure 500 {object} respError
+// @Failure default {object} respError
+// @Router /api/lists/{id}/items [post]
 func (h *Handler) createItem(c *gin.Context) {
 	userId, err := getUserId(c)
 	if err != nil {
@@ -21,6 +35,7 @@ func (h *Handler) createItem(c *gin.Context) {
 	}
 
 	var input First_server.TodoItem
+
 	if err := c.BindJSON(&input); err != nil {
 		newErrorResponse(c, http.StatusBadRequest, err.Error())
 		return
@@ -35,6 +50,19 @@ func (h *Handler) createItem(c *gin.Context) {
 	})
 }
 
+// @Summary Get all items in list
+// @Security ApiKeyAuth
+// @Tags Items
+// @Description Get all items in list
+// @ID get-all-items
+// @Accept json
+// @Produce json
+// @Param id path int true "List ID"
+// @Success 200 {object} []First_server.TodoItem
+// @Failure 400,404 {object} respError
+// @Failure 500 {object} respError
+// @Failure default {object} respError
+// @Router /api/lists/{id}/items [get]
 func (h *Handler) getAllItems(c *gin.Context) {
 	userId, err := getUserId(c)
 	if err != nil {
@@ -55,6 +83,20 @@ func (h *Handler) getAllItems(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, items)
 }
+
+// @Summary Get item by ID
+// @Security ApiKeyAuth
+// @Tags Items
+// @Description Get item by ID
+// @ID get-item-by-id
+// @Accept json
+// @Produce json
+// @Param id path int true "Item ID"
+// @Success 200 {object} First_server.TodoItem
+// @Failure 400,404 {object} respError
+// @Failure 500 {object} respError
+// @Failure default {object} respError
+// @Router /api/items/{id} [get]
 func (h *Handler) getItemById(c *gin.Context) {
 	userId, err := getUserId(c)
 	if err != nil {
@@ -76,6 +118,20 @@ func (h *Handler) getItemById(c *gin.Context) {
 	c.JSON(http.StatusOK, item)
 }
 
+// @Summary Update item
+// @Security ApiKeyAuth
+// @Tags Items
+// @Description Update item's info
+// @ID update-item
+// @Accept json
+// @Produce json
+// @Param input body First_server.UpdateItemInput true "updated item info"
+// @Param id path int true "Item ID"
+// @Success 200 {object} statusResponse
+// @Failure 400,404 {object} respError
+// @Failure 500 {object} respError
+// @Failure default {object} respError
+// @Router /api/items/{id} [put]
 func (h *Handler) updateItem(c *gin.Context) {
 	userId, err := getUserId(c)
 	if err != nil {
@@ -102,6 +158,20 @@ func (h *Handler) updateItem(c *gin.Context) {
 		Status: "ok",
 	})
 }
+
+// @Summary Delete item
+// @Security ApiKeyAuth
+// @Tags Items
+// @Description Delete item
+// @ID delete-item
+// @Accept json
+// @Produce json
+// @Param id path int true "Item ID"
+// @Success 200 {object} statusResponse
+// @Failure 400,404 {object} respError
+// @Failure 500 {object} respError
+// @Failure default {object} respError
+// @Router /api/items/{id} [delete]
 func (h *Handler) deleteItem(c *gin.Context) {
 	userId, err := getUserId(c)
 	if err != nil {
